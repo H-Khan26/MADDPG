@@ -21,7 +21,6 @@
 ## Paper
 
 > **Enhancing the MADDPG Algorithm for Multi-Agent Learning via Action Inference and Importance Sampling**
-> Marc Walden, Jason Liu, Shaashwath Sivakumar, Ryan Liu, Hamza Khan — UCLA Department of Mathematics
 > arXiv:2606.05021 (cs.LG), June 2026 · [arXiv page](https://arxiv.org/abs/2606.05021) · [PDF](https://arxiv.org/pdf/2606.05021) · [local copy](Enhancing_MADDPG_Paper.pdf)
 
 **Abstract.** We investigate multi-agent deep reinforcement learning and propose two enhancements to the Multi-Agent Deep Deterministic Policy Gradient (MADDPG) algorithm. First, we introduce an Action Inference mechanism that enables each agent to predict other agents' actions, improving the accuracy and stability of its own policy. Second, we apply a recency-biased sampling strategy, using a geometric distribution over the replay buffer, to prioritise more recent and informative experiences, which helps mitigate the non-stationarity inherent in multi-agent environments. We evaluate both modifications on the discrete-action Predator–Prey task from PettingZoo. Action Inference improves learning stability and inter-agent cooperation, and geometric sampling improves exploration efficiency over standard MADDPG.
@@ -170,17 +169,3 @@ Planned extensions, roughly in order of effort:
 - **Environment** — PettingZoo (Terry et al., NeurIPS 2021, [site](https://pettingzoo.farama.org/)); original MPE from OpenAI ([repo](https://github.com/openai/multiagent-particle-envs)).
 - **Starting point** — the baseline loop was adapted from [Git-123-Hub/maddpg-pettingzoo-pytorch](https://github.com/Git-123-Hub/maddpg-pettingzoo-pytorch).
 
-## Citation
-
-```bibtex
-@article{walden2026maddpg,
-  title   = {Enhancing the MADDPG Algorithm for Multi-Agent Learning via Action Inference and Importance Sampling},
-  author  = {Walden, Marc and Liu, Jason and Sivakumar, Shaashwath and Liu, Ryan and Khan, Hamza},
-  journal = {arXiv preprint arXiv:2606.05021},
-  year    = {2026}
-}
-```
-
-## Acknowledgements
-
-We thank Professor Tao Gao (UCLA) for his guidance throughout this project.
