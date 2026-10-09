@@ -1,0 +1,8 @@
+torch>=2.0
+numpy
+matplotlib
+pillow
+imageio
+pygame-ce
+gymnasium
+pettingzoo==1.24.3

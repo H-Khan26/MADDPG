@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 560" width="1120" height="560" role="img" aria-label="MADDPG training cycle on predator-prey with two enhancements: an action-inference network feeding predicted joint actions into each actor, and geometric recency-biased sampling from the replay buffer into the centralized critics." font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#52514e"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2a78d6"/>
+    </marker>
+    <linearGradient id="recency" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#cde2fb"/>
+      <stop offset="0.55" stop-color="#86b6ef"/>
+      <stop offset="0.85" stop-color="#2a78d6"/>
+      <stop offset="1" stop-color="#0d366b"/>
+    </linearGradient>
+    <!-- data-flow loop followed by the moving token -->
+    <path id="loop" d="M290,190 L400,190 L480,200 L480,330 L560,330 L640,130 L820,130 L880,130 L980,200 L980,290 L560,290 L480,200" fill="none"/>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="560" fill="#fcfcfb"/>
+
+  <!-- ===== phase bands ===== -->
+  <rect x="20" y="36" width="560" height="470" rx="10" fill="none" stroke="#e1e0d9"/>
+  <text x="34" y="58" fill="#898781" font-size="12" font-weight="600">EXECUTION  ·  decentralized (each actor sees only its own observation)</text>
+  <rect x="610" y="36" width="490" height="470" rx="10" fill="none" stroke="#e1e0d9"/>
+  <text x="624" y="58" fill="#898781" font-size="12" font-weight="600">TRAINING  ·  centralized (critics see the joint state and all actions)</text>
+
+  <!-- ===== Environment: predator-prey arena ===== -->
+  <text x="40" y="92" fill="#0b0b0b" font-weight="600">simple_tag_v3</text>
+  <text x="40" y="108" fill="#52514e" font-size="11">3 predators chase 1 faster prey, 2 obstacles</text>
+  <rect x="40" y="118" width="240" height="240" rx="6" fill="#ffffff" stroke="#c3c2b7"/>
+  <circle cx="110" cy="250" r="18" fill="#e1e0d9"/>
+  <circle cx="215" cy="175" r="14" fill="#e1e0d9"/>
+
+  <!-- prey (green) -->
+  <circle cx="200" cy="300" r="8" fill="#1baf7a" stroke="#0b0b0b" stroke-width="0.5">
+    <animate attributeName="cx" dur="8s" repeatCount="indefinite" calcMode="spline"
+      keyTimes="0;0.25;0.5;0.75;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+      values="200;90;80;230;200"/>
+    <animate attributeName="cy" dur="8s" repeatCount="indefinite" calcMode="spline"
+      keyTimes="0;0.25;0.5;0.75;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+      values="300;320;160;140;300"/>
+  </circle>
+  <!-- predators (red) lag the prey along the same route -->
+  <circle cx="70" cy="160" r="10" fill="#e34948" stroke="#0b0b0b" stroke-width="0.5">
+    <animate attributeName="cx" dur="8s" repeatCount="indefinite" calcMode="spline"
+      keyTimes="0;0.25;0.5;0.75;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+      values="70;150;120;100;70"/>
+    <animate attributeName="cy" dur="8s" repeatCount="indefinite" calcMode="spline"
+      keyTimes="0;0.25;0.5;0.75;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+      values="160;300;300;180;160"/>
+  </circle>
+  <circle cx="250" cy="240" r="10" fill="#e34948" stroke="#0b0b0b" stroke-width="0.5">
+    <animate attributeName="cx" dur="8s" repeatCount="indefinite" calcMode="spline"
+      keyTimes="0;0.25;0.5;0.75;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+      values="250;240;130;60;250"/>
+    <animate attributeName="cy" dur="8s" repeatCount="indefinite" calcMode="spline"
+      keyTimes="0;0.25;0.5;0.75;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+      values="240;330;200;200;240"/>
+  </circle>
+  <circle cx="140" cy="330" r="10" fill="#e34948" stroke="#0b0b0b" stroke-width="0.5">
+    <animate attributeName="cx" dur="8s" repeatCount="indefinite" calcMode="spline"
+      keyTimes="0;0.25;0.5;0.75;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+      values="140;80;170;200;140"/>
+    <animate attributeName="cy" dur="8s" repeatCount="indefinite" calcMode="spline"
+      keyTimes="0;0.25;0.5;0.75;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+      values="330;240;130;240;330"/>
+  </circle>
+  <!-- arena legend -->
+  <circle cx="52" cy="376" r="5" fill="#e34948"/><text x="62" y="380" fill="#52514e" font-size="11">predators: +10 per tag, slower</text>
+  <circle cx="52" cy="394" r="4" fill="#1baf7a"/><text x="62" y="398" fill="#52514e" font-size="11">prey: −10 per tag, faster</text>
+
+  <!-- ===== Actors ===== -->
+  <rect x="400" y="118" width="160" height="150" rx="8" fill="#ffffff" stroke="#52514e"/>
+  <text x="480" y="140" text-anchor="middle" fill="#0b0b0b" font-weight="600">Actors μᵢ</text>
+  <text x="480" y="156" text-anchor="middle" fill="#52514e" font-size="11">one per agent, MLP 64-64</text>
+  <g font-size="11" fill="#0b0b0b">
+    <rect x="412" y="168" width="136" height="18" rx="3" fill="#fcfcfb" stroke="#c3c2b7"/><text x="480" y="181" text-anchor="middle">μ₀(o₀, â₀) → a₀</text>
+    <rect x="412" y="190" width="136" height="18" rx="3" fill="#fcfcfb" stroke="#c3c2b7"/><text x="480" y="203" text-anchor="middle">μ₁(o₁, â₁) → a₁</text>
+    <rect x="412" y="212" width="136" height="18" rx="3" fill="#fcfcfb" stroke="#c3c2b7"/><text x="480" y="225" text-anchor="middle">μ₂(o₂, â₂) → a₂</text>
+    <rect x="412" y="234" width="136" height="18" rx="3" fill="#fcfcfb" stroke="#c3c2b7"/><text x="480" y="247" text-anchor="middle">μ₃(o₃, â₃) → a₃</text>
+  </g>
+
+  <!-- env -> actors (observations) -->
+  <line x1="280" y1="190" x2="398" y2="190" stroke="#52514e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="340" y="182" text-anchor="middle" fill="#52514e" font-size="11">oᵢ (local obs)</text>
+  <!-- actors -> env (actions) -->
+  <path d="M400,250 L340,250 L340,330 L282,330" fill="none" stroke="#52514e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="312" y="322" text-anchor="middle" fill="#52514e" font-size="11">aᵢ + noise</text>
+
+  <!-- ===== Enhancement 1: Action-Inference network ===== -->
+  <rect x="400" y="330" width="160" height="110" rx="8" fill="#eef5fd" stroke="#2a78d6" stroke-width="2"/>
+  <text x="480" y="352" text-anchor="middle" fill="#2a78d6" font-weight="700" font-size="12">① ACTION INFERENCE</text>
+  <text x="480" y="370" text-anchor="middle" fill="#0b0b0b" font-size="11">AI_Net (pre-trained, frozen)</text>
+  <text x="480" y="388" text-anchor="middle" fill="#52514e" font-size="11">in: oₜ, oₜ₋₁, Δo  per agent pair</text>
+  <text x="480" y="404" text-anchor="middle" fill="#52514e" font-size="11">social + self awareness MLPs</text>
+  <text x="480" y="424" text-anchor="middle" fill="#0b0b0b" font-size="11">out: âᵢ ≈ one-hot(a₁..a_N)</text>
+  <!-- env (obs history) -> AI net -->
+  <path d="M270,358 L270,422 L398,422" fill="none" stroke="#2a78d6" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <text x="334" y="414" text-anchor="middle" fill="#2a78d6" font-size="11">oₜ, oₜ₋₁ (two frames)</text>
+  <!-- AI net -> actors -->
+  <line x1="480" y1="330" x2="480" y2="270" stroke="#2a78d6" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="498" y="304" fill="#2a78d6" font-size="11" font-weight="600">âᵢ</text>
+
+  <!-- ===== transition -> replay buffer ===== -->
+  <path d="M262,118 L262,80 L640,80 L640,116" fill="none" stroke="#52514e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="450" y="74" text-anchor="middle" fill="#52514e" font-size="11">store transition (x, a, r, x′, o, o⁻)</text>
+
+  <!-- ===== Replay buffer with recency gradient ===== -->
+  <rect x="640" y="118" width="200" height="150" rx="8" fill="#ffffff" stroke="#52514e"/>
+  <text x="740" y="140" text-anchor="middle" fill="#0b0b0b" font-weight="600">Replay buffer 𝒟</text>
+  <rect x="652" y="152" width="176" height="22" rx="3" fill="url(#recency)"/>
+  <text x="656" y="190" fill="#52514e" font-size="10">oldest</text>
+  <text x="824" y="190" text-anchor="end" fill="#52514e" font-size="10">newest</text>
+  <!-- sampling cursor that favors the right (recent) end -->
+  <rect x="800" y="149" width="6" height="28" rx="1" fill="#0b0b0b" opacity="0.85">
+    <animate attributeName="x" dur="3s" repeatCount="indefinite" values="800;818;760;812;822;790;815;800"/>
+  </rect>
+  <rect x="652" y="200" width="176" height="56" rx="4" fill="#eef5fd" stroke="#2a78d6" stroke-width="2"/>
+  <text x="740" y="217" text-anchor="middle" fill="#2a78d6" font-weight="700" font-size="12">② GEOMETRIC SAMPLING</text>
+  <text x="740" y="233" text-anchor="middle" fill="#0b0b0b" font-size="11">k ~ Geom(p),  idx = N − k</text>
+  <text x="740" y="248" text-anchor="middle" fill="#52514e" font-size="11">P(k) = (1−p)ᵏ⁻¹p · recent first</text>
+
+  <!-- buffer -> critics -->
+  <line x1="840" y1="190" x2="898" y2="190" stroke="#2a78d6" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="869" y="180" text-anchor="middle" fill="#2a78d6" font-size="11">minibatch</text>
+
+  <!-- ===== Centralized critics ===== -->
+  <rect x="900" y="118" width="180" height="150" rx="8" fill="#ffffff" stroke="#52514e"/>
+  <text x="990" y="140" text-anchor="middle" fill="#0b0b0b" font-weight="600">Critics Qᵢ(x, a₁..a_N)</text>
+  <text x="990" y="156" text-anchor="middle" fill="#52514e" font-size="11">joint state + joint one-hot actions</text>
+  <text x="990" y="182" text-anchor="middle" fill="#0b0b0b" font-size="11">y = r + γ Q′ᵢ(x′, μ′(o′))</text>
+  <text x="990" y="200" text-anchor="middle" fill="#0b0b0b" font-size="11">L = ‖y − Qᵢ(x, a)‖²</text>
+  <text x="990" y="226" text-anchor="middle" fill="#52514e" font-size="11">target nets: soft update τ</text>
+  <text x="990" y="244" text-anchor="middle" fill="#52514e" font-size="11">per-agent, trained only here</text>
+
+  <!-- critics -> actors (policy gradient), dashed, along the bottom -->
+  <path d="M990,268 L990,300 L580,300 L580,236 L562,236" fill="none" stroke="#52514e" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+  <text x="785" y="294" text-anchor="middle" fill="#52514e" font-size="11">actor update  ∇θᵢ J = ∇θᵢ μᵢ · ∇aᵢ Qᵢ(x, a)  (gradients only, not deployed)</text>
+
+  <!-- ===== moving token tracing the cycle ===== -->
+  <circle r="5" fill="#eda100" stroke="#0b0b0b" stroke-width="0.6" opacity="0">
+    <set attributeName="opacity" to="1" begin="0s"/>
+    <animateMotion dur="9s" repeatCount="indefinite" rotate="0">
+      <mpath href="#loop"/>
+    </animateMotion>
+  </circle>
+
+  <!-- ===== footer: why it matters ===== -->
+  <text x="34" y="470" fill="#0b0b0b" font-size="12" font-weight="600">Why the two additions help</text>
+  <text x="34" y="490" fill="#52514e" font-size="11">① Each actor receives an estimate of what the other agents just did,</text>
+  <text x="34" y="506" fill="#52514e" font-size="11">so their behaviour stops looking like unexplained noise in the environment.</text>
+  <text x="624" y="470" fill="#0b0b0b" font-size="12" font-weight="600">Non-stationarity</text>
+  <text x="624" y="490" fill="#52514e" font-size="11">② Old transitions were generated by stale co-player policies.</text>
+  <text x="624" y="506" fill="#52514e" font-size="11">Sampling recent indices more often keeps critic targets current.</text>
+
+  <text x="560" y="540" text-anchor="middle" fill="#898781" font-size="11">Loop: act in env → store → sample (recency-biased) → update critics → push gradients into actors → repeat. Blue = enhancements over standard MADDPG.</text>
+</svg>
