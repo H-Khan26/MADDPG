@@ -57,8 +57,10 @@ The loop is the standard MADDPG cycle, **act → store → sample → update cri
 ### ① Action Inference (`AI_Net`)
 
 <p align="center">
-  <img src="assets/paper_fig2_ai_net.jpg" alt="AI_Net architecture: temporally stacked observations are partitioned per observed agent and routed to Directional Social Awareness modules and a Directional Self Awareness module, whose outputs are concatenated into the predicted joint action vector" width="640">
+  <img src="assets/ai_net.svg" alt="AI_Net architecture: the observer's observation at t and t-1 and their difference are partitioned into per-agent slices; each slice plus the self/global block is routed to a Directional Social Awareness module shared per agent-type pair, the self/global block alone goes to a Directional Self Awareness module, and the module outputs are concatenated into the predicted joint action vector that feeds the actor" width="100%">
 </p>
+
+*Read left to right: (1) stack the observation at `t` and `t−1` and compute their difference; (2) for each other agent `k`, bundle its slice with the observer's own block; (3) run each bundle through a small MLP that is shared by every (observer type, observed type) pair; (4) concatenate the per-agent predictions into `â_i` and hand it to the actor. The original hand-drawn version is Figure 2 of the [paper](Enhancing_MADDPG_Paper.pdf).*
 
 **Goal.** Give agent *i* an estimate of the joint action vector `â_i ≈ concat(onehot(a_1), …, onehot(a_N))` from its own observations only, so that the other agents stop looking like unexplained noise.
 
