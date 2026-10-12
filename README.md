@@ -148,24 +148,3 @@ python Action_Inference.py
 # Train with geometric sampling and record rollout GIFs every 500 episodes
 python visualize_training.py --out results/geom --episodes 4000 --sampler geometric --geom-p 1e-4
 ```
-
-## Roadmap
-
-Planned extensions, roughly in order of effort:
-
-- [ ] Seeded, config-driven runs (≥5 seeds) with interquartile-mean learning curves and bootstrap confidence intervals, following the [MARL evaluation protocol](https://arxiv.org/abs/2209.10485).
-- [ ] A 2×2 ablation {± Action Inference} × {uniform vs geometric replay}, plus a sweep over `p`.
-- [ ] Report task metrics (capture rate, time-to-capture) alongside reward.
-- [ ] Baselines through [BenchMARL](https://github.com/facebookresearch/BenchMARL): MAPPO, IPPO, QMIX, and MADDPG with the original "inferred policies" variant.
-- [ ] Competing fixes for non-stationarity: FIFO buffer size sweep, prioritised replay, [ERE](https://arxiv.org/abs/1906.04009), and [fingerprints](https://arxiv.org/abs/1702.08887).
-- [ ] Partial observability (limited sensing radius) and 5–8 predators, which stress the fixed-size critic.
-- [ ] A bridge to a real domain: multi-vehicle intersection negotiation in [highway-env](https://highway-env.farama.org/multi_agent/), where action inference becomes "will the other car yield?".
-
-## Related work
-
-- **MADDPG** — Lowe et al., *Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments*, NeurIPS 2017. [arXiv](https://arxiv.org/abs/1706.02275). Section 4.2 also fits approximate models of other agents' policies; our contribution is the separable, pre-trained, type-shared module design with explicit temporal differences.
-- **Agent modelling** — LIAM (Papoudakis et al., NeurIPS 2021, [arXiv](https://arxiv.org/abs/2006.09447)); ToMnet (Rabinowitz et al., ICML 2018, [arXiv](https://arxiv.org/abs/1802.07740)).
-- **Replay and non-stationarity** — Foerster et al., *Stabilising Experience Replay for Deep Multi-Agent RL*, ICML 2017 ([arXiv](https://arxiv.org/abs/1702.08887)); Wang & Ross, *Emphasizing Recent Experience*, 2019 ([arXiv](https://arxiv.org/abs/1906.04009)); Schaul et al., *Prioritized Experience Replay*, ICLR 2016 ([arXiv](https://arxiv.org/abs/1511.05952)).
-- **Environment** — PettingZoo (Terry et al., NeurIPS 2021, [site](https://pettingzoo.farama.org/)); original MPE from OpenAI ([repo](https://github.com/openai/multiagent-particle-envs)).
-- **Starting point** — the baseline loop was adapted from [Git-123-Hub/maddpg-pettingzoo-pytorch](https://github.com/Git-123-Hub/maddpg-pettingzoo-pytorch).
-
